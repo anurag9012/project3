@@ -1,25 +1,30 @@
-import logo from './logo.svg';
+
 import './App.css';
+import getSmileys from './data.js';
+import { useState, useEffect } from 'react';
 
 function App() {
+  console.log("rerender")
+  const [search, setSearch] = useState('');
+  const [ndata, setnData] = useState([]);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const newData = data.filter((emoji) => emoji.title.toLowerCase().includes(search.toLowerCase()));
+    setnData(newData);
+  }, [search]);
+
+  useEffect(() => {
+    console.log("secondUseEffect")
+    let result = getSmileys();
+    setData(result);
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Emoji Search</h1>
+      <input className='searchbar' type="text" value={search} onChange={(e) => setSearch(e.target.value)} ></input>
+      {ndata.map((emoji) => <li >{emoji.symbol} {emoji.title}</li>)}
+
     </div>
   );
 }
-
 export default App;
